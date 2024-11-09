@@ -1,0 +1,34 @@
+/* Note.css */
+.note-card {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Initial shadow */
+    border-radius: 8px; /* Optional: Adds rounded corners */
+    transition: box-shadow 0.3s ease-in-out; /* Smooth transition */
+}
+
+/* Hover effect for a larger shadow */
+.note-card:hover {
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4); /* Bigger shadow on hover */
+}
+.note-container {
+    display: flex;
+    flex-wrap: wrap; /* Allows notes to wrap onto a new row if needed */
+    gap: 1rem; /* Adds space between each note */
+    justify-content: space-around;
+}
+
+.note-card {
+    flex: 1 1 18rem; /* Each card takes up a minimum width of 18rem */
+}
+.note-button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+    padding-top: 10px;
+    margin-right: 100px;
+}
+.create-note-container{
+    margin-bottom: 50px;
+}
+
