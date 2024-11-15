@@ -31,4 +31,8 @@
 .create-note-container{
     margin-bottom: 50px;
 }
-
+.note-form{
+    width:70%;
+    position: relative;
+    left:175px
+}

@@ -3,8 +3,16 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Card} from "react-bootstrap";
 import "../style/NotePage.css"
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import Form from 'react-bootstrap/Form';
+import User from "../model/user";
+
+export async function getLoggedInUser(): Promise<User[]> {
+    const res = await fetch("/api/users", {method: "GET"})
+    if (!res.ok) {
+        throw new Error("Failed to fetch notes");
+    }
+    const data:User[]=await res.json();
+    return data
+}
 
 const Note = () => {
 
@@ -14,28 +22,35 @@ const Note = () => {
     const [text, setText] = useState("")
     const [edit, setEdit] = useState("")
 
+
+
+    // const getNotes = () => {
+    //     axios.get("/api/notes/")
+    //         .then((response) => {
+    //             setNotes(Array.isArray(response.data) ? response.data : []);
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //             alert("Failed to load notes");
+    //         })
+    // }
+
+    const getNotes = async (): Promise<void> => {
+        try {
+            const res = await fetch("/api/notes", {method: "GET"});
+            if (!res.ok) {
+                throw new Error("Failed to fetch notes");
+            }
+            const data: NoteModel[] = await res.json();
+            setNotes(data); // Set the resolved notes array in state
+        } catch (error) {
+            console.error("Error fetching notes:", error);
+            alert("Failed to load notes");
+        }
+    };
     useEffect(() => {
-        axios.get("/api/notes/")
-            .then((response) => {
-                setNotes(Array.isArray(response.data) ? response.data : []);
-            })
-            .catch((err) => {
-                console.log(err);
-                alert("Failed to load notes");
-            })
+        getNotes();
     }, []);
-
-    const getNotes = () => {
-        axios.get("/api/notes/")
-            .then((response) => {
-                setNotes(Array.isArray(response.data) ? response.data : []);
-            })
-            .catch((err) => {
-                console.log(err);
-                alert("Failed to load notes");
-            })
-    }
-
     const handleTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(event.target.value);
     };
@@ -63,8 +78,7 @@ const Note = () => {
             })
     }
 
-
-    const data1={
+    const data1 = {
         title: title,
         text: text
     }
@@ -95,7 +109,7 @@ const Note = () => {
 
             {
                 addNote &&
-                <div className={"create-note-container"}>
+                <div className={"create-note-container note-form"}>
                     <div className={"d-flex justify-content-center"}>
                         <h2 className={"justify-content-center"}>Create Note</h2>
                     </div>
@@ -104,18 +118,22 @@ const Note = () => {
                             <b><label className={"form-label"}>Title </label></b>
                             <input type={"text"} className={"form-control"} onChange={handleTitle} value={title}/>
                         </div>
-                        <div >
+                        <div>
                             <b><label className={"form-label"}>Text</label></b>
                             <input type={"text"} className={"form-control"} onChange={handleText} value={text}/>
                         </div>
                         <button type={"submit"} className={"btn btn-success btn-sm mt-2"}>save</button>
+                        <button type={"button"} className={"btn btn-danger btn-sm mt-2"} onClick={() => {
+                            setAddNote(false);
+                        }}>cansel
+                        </button>
                     </form>
                 </div>
             }
 
             {
                 edit &&
-                <div>
+                <div className={"note-form"}>
                     <div className={"d-flex justify-content-center"}>
                         <h2 className={"justify-content-center"}>Edit Note</h2>
                     </div>
@@ -128,7 +146,11 @@ const Note = () => {
                             <b><label className={"form-label"}>Text</label></b>
                             <input type={"text"} className={"form-control"} onChange={handleText} value={text}/>
                         </div>
-                        <button type={"submit"} className={"btn btn-success btn-sm"}>update</button>
+                        <button type={"submit"} className={"btn btn-success btn-sm mb-5"}>update</button>
+                        <button type={"button"} className={"btn btn-danger btn-sm mb-5"} onClick={() => {
+                            setEdit("");
+                        }}>cansel
+                        </button>
                     </form>
                 </div>
             }
