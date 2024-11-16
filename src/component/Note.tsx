@@ -3,16 +3,6 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Card} from "react-bootstrap";
 import "../style/NotePage.css"
-import User from "../model/user";
-
-export async function getLoggedInUser(): Promise<User[]> {
-    const res = await fetch("/api/users", {method: "GET"})
-    if (!res.ok) {
-        throw new Error("Failed to fetch notes");
-    }
-    const data:User[]=await res.json();
-    return data
-}
 
 const Note = () => {
 
